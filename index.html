@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Digital Product Marketplace</title>
+<meta name="description" content="Compare top-rated digital products by category and find the best offers.">
+<link rel="canonical" href="https://offerscout.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Digital Product Marketplace">
+<meta property="og:description" content="Compare top-rated digital products by category and find the best offers.">
+<meta property="og:url" content="https://offerscout.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛒%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--tx:#1b1f27;--mu:#667085;--bd:#e4e7ec;--ac:#2563eb;--ac2:#1d4ed8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1218;--card:#181c24;--tx:#eef0f4;--mu:#9aa3b2;--bd:#2a303b}}
+:root[data-theme="dark"]{--bg:#0f1218;--card:#181c24;--tx:#eef0f4;--mu:#9aa3b2;--bd:#2a303b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:48px 20px 28px;text-align:center}
+h1{margin:0 0 8px;font-size:clamp(26px,5vw,40px)}
+header p{margin:0 auto;max-width:560px;color:var(--mu)}
+main{max-width:1100px;margin:0 auto;padding:0 16px 40px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+input,select,textarea,button{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px}
+.bar input[type=search]{flex:1 1 220px}
+button{cursor:pointer}
+.pri{background:var(--ac);border-color:var(--ac);color:#fff}
+.pri:hover{background:var(--ac2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.card h3{margin:0;font-size:17px}
+.tag{font-size:12px;color:var(--mu)}
+.card p{margin:0;color:var(--mu);font-size:14px;flex:1}
+.meta{display:flex;gap:12px;font-size:13px;color:var(--mu)}
+.card a{text-align:center;text-decoration:none;background:var(--ac);color:#fff;padding:10px;border-radius:10px;font-weight:600}
+.card a:hover{background:var(--ac2)}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:18px}
+.panel summary{cursor:pointer;font-weight:600}
+.panel textarea{width:100%;min-height:110px;margin:10px 0;font-family:ui-monospace,monospace;font-size:13px}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.empty{text-align:center;color:var(--mu);padding:40px 10px}
+.cta{display:inline-block;text-decoration:none;background:#f59e0b;color:#111;font-weight:700;padding:11px 18px;border-radius:10px}.cta:hover{background:#d97706}.feat{text-align:center}.feat h2{margin:4px 0}.feat p{color:var(--mu);margin:0 0 12px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{border-bottom:1px solid var(--bd);padding:8px;text-align:left}
+.banner{background:var(--card);border-bottom:1px solid var(--bd);color:var(--mu);font-size:13px;text-align:center;padding:8px 12px}.legal{line-height:1.6}.legal h2{margin-top:0}footer a{color:inherit}footer p{margin:6px 0}
+footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--mu);font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+<div class="banner">Affiliate disclosure: we may earn a commission when you buy through links on this page, at no extra cost to you.</div>
+<header>
+<h1>Digital Product Marketplace</h1>
+<p>Browse top-rated digital products by category. Click through to the official vendor page to buy securely.</p>
+</header>
+<main>
+<section class="panel legal" id="legal" hidden></section>
+<details class="panel" id="admin" hidden>
+<summary>Store setup (owner only)</summary>
+<div class="row">
+<input id="aff" placeholder="Your ClickBank nickname (affiliate ID)" style="flex:1 1 260px">
+<button class="pri" id="saveAff">Save ID</button>
+</div>
+<p class="tag">Product import: paste CSV with header <b>title,vendor,category,description,gravity,commission</b> (one product per line). Vendor = the vendor's ClickBank ID. Export this from the ClickBank Marketplace/API. Saved in this browser only.</p>
+<textarea id="csv" placeholder="title,vendor,category,description,gravity,commission&#10;Example Product,vendorid,Health & Fitness,Short description,45,75"></textarea>
+<div class="row"><button class="pri" id="imp">Import products</button><button id="clr">Clear products</button></div>
+<div class="row"><input id="su" placeholder="Email signup page URL (GetResponse / Kit hosted form)" style="flex:1 1 260px"><button class="pri" id="saveSu">Save</button></div>
+<table style="margin-top:10px"><tr><th>Link manager</th><th>Clicks</th><th></th></tr><tbody id="mgr"></tbody></table>
+<p class="tag" id="msg"></p>
+</details>
+
+<div class="panel feat" id="feat" hidden></div>
+<div class="bar">
+<input type="search" id="q" placeholder="Search products…">
+<select id="cat"><option value="">All categories</option></select>
+<select id="sort"><option value="g">Top rated (gravity)</option><option value="c">Highest commission</option><option value="a">A–Z</option></select>
+</div>
+<div class="panel" id="cmp" hidden></div>
+<div class="grid" id="grid"></div>
+<div class="panel" id="sig" hidden style="text-align:center;margin-top:18px"><h3 style="margin:0 0 6px">Get weekly top picks</h3><p class="tag">Join the list for the best new offers.</p><a class="cta" id="sigbtn" href="#" target="_blank" rel="noopener">Join free</a></div>
+<div class="empty" id="empty" hidden>No products yet. Open “Store setup” above to add your ClickBank affiliate ID and import products.</div>
+</main>
+<footer><p>Disclosure: some links are affiliate links; we may earn a commission at no extra cost to you. Products are sold and fulfilled by their vendors via ClickBank.</p><p><a href="#privacy">Privacy Policy</a> · <a href="#terms">Terms of Use</a> · <a href="#disclaimer">Earnings &amp; Health Disclaimer</a> · <a href="#contact">Contact</a></p></footer>
+<script>
+const $=id=>document.getElementById(id);
+let products=[],aff='';
+const SP=['https://hop.clickbank.net/?affiliate=cb1098&vendor=femicore&cbpage=tsl&affop=1','https://hop.clickbank.net/?affiliate=YOUR_ID&vendor=kerassent&cbpage=tsl&tid=YOUR_TID'];
+const IDS='b8fa63nq9ycm6tdardil1uet31 242ec8jm68ll7y0dkbdhu6cxby 97befyco3uco3k30-2rg6a2b2c d8e8e6lqbubqekcnmnlkpifk9o 064aezfmb5nqaq7k1fs7shqc2u fb4766rv48ktfldhqu4a03oqdq 3a0214jw22exer6qilnfuwbzbb 5810aadq6xfvan4ljptj4-ez6i 5b0eayft12jo1peotao8-a6r2h f933f6fz56ekbvb948l4sj8ybl 66e0e8oq44fm5ueeveqeu92lc6 2ffa6xqo1zeu2x9fjeogv15z7o c5a881dnbvek7k6d5i7hy65la2 7f9fa2cu67iperbpy-o9fnq3p4 608254fre6bxenc32qviu9qy63 87b262gr51ow7q0ithk1rl5w8i 80806zk0gylt7p1ykatiobwnl4 e070e5gxf0fk8x4hf-ygx6xrb9 90cfd1fo57ep0ud-3jk-ler7cb 94712bkr9veu0nd5gfz-yp0tbs 61ed24lv369lazegv5-muefz82 b33acxfu80jkfpdkjiyjdkes38 3126a6lwc2gq3z41tplkmvaqb8 6b0d73goc5nn1p9rlx0olnr20v 4306f5ixexbo0s7efp05lhysax 9c98dbfqg8cz7obc-4h20l1p5z ca0c75hpd6ku1obiw-2reiikfu 92ab2ykp16iyaxc82lzzjdomfs 51cba4i0g1aoeu6bqkoc364v6w cea69zpvd3kr0z3ofemif9ja2m bb5100qq9xozet66cmpayjrp6g 2740c1gy30co1p1d0sphpeq1bo d4db69c038gu0k9spoolucrq85 928018ks9ybnald7vt-nv1cmaw ae81c8lu13jsbqd70lt70zcvfl 374589lod8ks9mad5g64e90pc6 7a9ca5rrg7gz7p3doqu8gfljkv 7e2402q-8xgm4n8lpou-zjvl6i 1d5181cv5wnx1o6aj8ojv90o2t c55d50q-74gu4xbvhlo8ifw6uu 761c9-g-9zgt6r2dnow3fjmled 823ecypme6ksfp644mw8-jiedr ff9809fyb7hwaz29wgn9gmktqr 6d78e-omg0on5t0oxz9erblmuj e1b334mt3-cp7ma7th6lsbxgkt ce40dxgt5wdvdve7mftmw96lec 634d7xcn82ho0sdcqa0br52w2x'.split(' ');
+const BASE=SP.concat(IDS.map(i=>`https://${i}.hop.clickbank.net`)).map((u,n)=>{const m=u.match(/vendor=([a-z0-9]+)/i);return{b:1,url:u,title:m?m[1][0].toUpperCase()+m[1].slice(1):'Featured Offer '+(n-1),vendor:'',category:'Featured Offers',description:'Tap to see full details on the official vendor page.',gravity:0,commission:0}});
+function load(){try{products=JSON.parse(localStorage.getItem('cbp')||'[]');aff=localStorage.getItem('cba')||''}catch(e){products=[];aff=''}products=BASE.concat(products.filter(p=>!p.b));$('aff').value=aff}
+function store(){try{localStorage.setItem('cbp',JSON.stringify(products));localStorage.setItem('cba',aff)}catch(e){$('msg').textContent='Browser storage unavailable; data will not persist.'}}
+function parseCSV(t){const rows=[];let r=[],f='',q=false;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c=='"'){if(t[i+1]=='"'){f+='"';i++}else q=false}else f+=c}else if(c=='"')q=true;else if(c==','){r.push(f);f=''}else if(c=='\n'){r.push(f);rows.push(r);r=[];f=''}else if(c!='\r')f+=c}if(f||r.length){r.push(f);rows.push(r)}return rows}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function link(p){if(p.url){let u=p.url.replace('YOUR_ID',aff||'YOUR_ID').replace('YOUR_TID','store');if(!/[?&]tid=/.test(u))u+=(u.includes('?')?'&':'?')+'tid=store';return u}const v=p.vendor.toLowerCase().replace(/[^a-z0-9]/g,'');const a=(aff||'').toLowerCase().replace(/[^a-z0-9]/g,'');return a?`https://${a}.${v}.hop.clickbank.net`:`https://${v}.hop.clickbank.net`}
+function render(){
+const cats=[...new Set(products.map(p=>p.category).filter(Boolean))].sort();
+const cur=$('cat').value;$('cat').innerHTML='<option value="">All categories</option>'+cats.map(c=>`<option ${c==cur?'selected':''}>${esc(c)}</option>`).join('');
+const q=$('q').value.toLowerCase(),c=$('cat').value,s=$('sort').value;
+let l=products.filter(p=>(!c||p.category==c)&&(!q||(p.title+' '+p.description).toLowerCase().includes(q)));
+l.sort((a,b)=>s=='a'?a.title.localeCompare(b.title):s=='c'?b.commission-a.commission:b.gravity-a.gravity);
+$('empty').hidden=products.length>0;
+$('grid').innerHTML=l.slice(0,300).map(p=>{const i=products.indexOf(p);return `<div class="card"><span class="tag">${esc(p.category||'General')}</span><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="meta">${p.gravity?`<span>Rating: ${p.gravity}</span>`:''}${p.commission?`<span>${p.commission}% commission</span>`:''}</div><label class="tag"><input type="checkbox" data-c="${i}" ${cmp.includes(i)?'checked':''}> Compare</label><a class="cta" href="${link(p)}" data-go="${i}" target="_blank" rel="noopener sponsored nofollow">Check price</a></div>`}).join('');
+feat();cmpRender();mgr()}
+let cmp=[],clicks={},opt={};
+try{clicks=JSON.parse(localStorage.getItem('cbk')||'{}');opt.su=localStorage.getItem('cbs')||''}catch(e){}
+function feat(){const t=[...products].sort((a,b)=>b.gravity-a.gravity)[0];$('feat').hidden=!t;if(!t)return;const i=products.indexOf(t);$('feat').innerHTML=`<span class="tag">Top pick</span><h2>${esc(t.title)}</h2><p>${esc(t.description)}</p><a class="cta" href="${link(t)}" data-go="${i}" target="_blank" rel="noopener sponsored nofollow">Check price →</a>`}
+function cmpRender(){const l=cmp.map(i=>products[i]).filter(Boolean);$('cmp').hidden=l.length<2;if(l.length<2)return;const rows=[['Category','category'],['Rating','gravity'],['Commission %','commission']];$('cmp').innerHTML='<div style="overflow-x:auto"><table><tr><th></th>'+l.map(p=>`<th>${esc(p.title)}</th>`).join('')+'</tr>'+rows.map(r=>`<tr><td>${r[0]}</td>`+l.map(p=>`<td>${esc(p[r[1]]||'-')}</td>`).join('')+'</tr>').join('')+'<tr><td></td>'+l.map(p=>`<td><a class="cta" href="${link(p)}" data-go="${products.indexOf(p)}" target="_blank" rel="noopener sponsored nofollow">Check price</a></td>`).join('')+'</tr></table></div>'}
+function mgr(){$('mgr').innerHTML=products.slice(0,100).map((p,i)=>`<tr><td>${esc(p.title)}</td><td>${clicks[i]||0}</td><td><button data-cp="${i}">Copy link</button></td></tr>`).join('')}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){const i=g.dataset.go;clicks[i]=(clicks[i]||0)+1;try{localStorage.setItem('cbk',JSON.stringify(clicks))}catch(x){}mgr()}const c=e.target.closest('[data-cp]');if(c){const u=link(products[c.dataset.cp]);if(navigator.clipboard)navigator.clipboard.writeText(u).then(()=>$('msg').textContent='Link copied.',()=>$('msg').textContent=u);else $('msg').textContent=u}});
+document.addEventListener('change',e=>{const k=e.target.dataset&&e.target.dataset.c;if(k===undefined)return;const i=+k;cmp=e.target.checked?[...cmp,i].slice(-3):cmp.filter(x=>x!==i);render()});
+function sig(){$('sig').hidden=!opt.su;$('sigbtn').href=opt.su||'#'}
+$('saveSu').onclick=()=>{opt.su=$('su').value.trim();try{localStorage.setItem('cbs',opt.su)}catch(e){}sig();$('msg').textContent='Signup link saved.'};
+$('saveAff').onclick=()=>{aff=$('aff').value.trim();store();render();$('msg').textContent='Affiliate ID saved.'};
+$('imp').onclick=()=>{const rows=parseCSV($('csv').value.trim());if(rows.length<2){$('msg').textContent='Paste a header row plus at least one product.';return}
+const h=rows[0].map(x=>x.trim().toLowerCase());const ix=k=>h.indexOf(k);
+const add=rows.slice(1).filter(r=>r[ix('title')]&&r[ix('vendor')]).map(r=>({title:r[ix('title')].trim(),vendor:r[ix('vendor')].trim(),category:(r[ix('category')]||'').trim(),description:(r[ix('description')]||'').trim(),gravity:+r[ix('gravity')]||0,commission:+r[ix('commission')]||0}));
+products=products.concat(add);store();render();$('csv').value='';$('msg').textContent=`Imported ${add.length} products (${products.length} total).`};
+$('clr').onclick=()=>{products=BASE.slice();store();render();$('msg').textContent='Products cleared.'};
+['q','cat','sort'].forEach(i=>$(i).oninput=render);
+const CONTACT='contact@offerscout.com',UPD='October 10, 2026';
+const L={
+privacy:`<h2>Privacy Policy</h2><p>Last updated: ${UPD}.</p><p>This site does not ask for or store personal information, run accounts or process payments.</p><p>When you click a product link you leave this site and go to ClickBank or the vendor's page. They use cookies to track the referral and handle your purchase under their own privacy policies. If you join our email list, your address is handled by our email provider on their sign-up page.</p><p>Your browser may keep small preferences locally. Questions: <a href='mailto:${CONTACT}'>${CONTACT}</a>.</p>`,
+terms:`<h2>Terms of Use</h2><p>Last updated: ${UPD}.</p><p>This site is an informational directory of third-party digital products. We do not own, sell or fulfil these products. Purchases, delivery, support and refunds are handled by ClickBank and each vendor under their own terms.</p><p>Content is provided as is, without warranties of any kind. We are not responsible for the accuracy of vendor claims or for any loss arising from use of this site or the products listed. Product listings may change or be removed at any time.</p>`,
+disclaimer:`<h2>Earnings &amp; Health Disclaimer</h2><p><b>Affiliate disclosure:</b> we are compensated when you buy through some links on this site, at no extra cost to you. This does not affect the price you pay.</p><p><b>No guarantees:</b> results vary. We make no promise that any product will deliver a particular outcome, income or benefit.</p><p><b>Health:</b> nothing here is medical advice. Products referenced may include dietary supplements, which are not intended to diagnose, treat, cure or prevent any disease. Talk to a qualified professional before starting any health product.</p>`,
+contact:`<h2>Contact</h2><p>Questions, feedback or a product concern? Email <a href='mailto:${CONTACT}'>${CONTACT}</a>. For orders, delivery or refunds, contact ClickBank or the vendor directly.</p>`};
+function route(){const h=location.hash.slice(1),s=$('legal');$('admin').hidden=h!=='owner';if(L[h]){s.innerHTML=L[h]+'<p><a href="#">← Back to store</a></p>';s.hidden=false;s.scrollIntoView()}else s.hidden=true}
+addEventListener('hashchange',route);
+load();$('su').value=opt.su||'';sig();render();route();
+</script>
+</body>
+</html>
